@@ -1,0 +1,43 @@
+.tablaEfectividad {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .tablaEfectividad table {
+    min-width: 600px;
+    width: max-content;
+  }
+}
+
+.tabla {
+  width: 100%;
+  margin: 0 auto;
+  table-layout: fixed;
+}
+
+.celda {
+  width: 16.66%;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 4px;
+  border: 1px solid #dee2e6;
+  font-size: 1rem;
+}
+
+.simbolo {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.eficaz {
+  color: green !important;
+  font-weight: bold;
+}
+
+.noEficaz {
+  color: red !important;
+  font-weight: bold;
+}
