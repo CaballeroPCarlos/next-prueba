@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "@/styles/Libros.module.css";
+import styles from "@/styles/libros.module.css";
 
 export default function LibrosPage() {
   const [libros, setLibros] = useState([]);
