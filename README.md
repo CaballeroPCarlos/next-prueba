@@ -1,40 +1,163 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 📘 Proyecto Next.js + Prisma (con PostgreSQL)
 
-## Getting Started
+Este proyecto contiene una configuración base para iniciar un desarrollo web utilizando **Next.js** y **Prisma** como ORM para bases de datos (probado con **Neon Postgres**).
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Configuración Inicial
+
+### 1. Abrir la terminal
+Puedes abrir PowerShell de dos formas:
+- Dentro de **Visual Studio Code**: `Ctrl + Shift + Ñ`  
+- Desde el **Explorador de archivos**: `Shift + clic derecho` sobre la carpeta del proyecto → “Abrir PowerShell aquí”
+
+### 2. Instalar Node.js
+Descarga e instala desde:  
+👉 [https://nodejs.org/es](https://nodejs.org/es) (archivo `.msi` recomendado).
+
+Si es necesario, habilita la ejecución de scripts en PowerShell:
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+````
+
+### 3. Crear un nuevo proyecto
+
+```powershell
+npx create-next-app@latest next-vacio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* Reemplaza **`next-vacio`** con el nombre de tu proyecto.
+* Presiona **Y** para confirmar.
+* Selecciona **No** en todas las opciones si deseas un proyecto limpio.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Entra a la carpeta del proyecto:
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```powershell
+cd next-vacio
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+Si clonaste el proyecto desde GitHub, solo ejecuta:
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```powershell
+npm install
+```
 
-## Learn More
+### 4. Iniciar el servidor de desarrollo
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+Abre tu navegador: [http://localhost:3000](http://localhost:3000)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧼 Limpieza Inicial (opcional)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Puedes eliminar archivos innecesarios para tener un proyecto más limpio:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+* `public/next.svg`
+* `public/vercel.svg`
+* `styles/Home.module.css`
+
+---
+
+## 🖌️ Archivos Clave
+
+* `styles/globals.css`: define los estilos globales.
+* `pages/index.js`: página principal (puede quedar solo con la función `Home()`).
+* `_document.js`: modifica el `<head>` del HTML; útil para agregar Bootstrap u otros estilos externos.
+Perfecto 🙌, te lo dejo corregido y formateado para que quede claro en el **README.md**:
+* `_app.js`: puedes agregar lo siguiente para que la aplicación sea "**responsiva**":
+
+```javascript
+import "@/styles/globals.css";
+import Head from "next/head";
+
+export default function App({ Component, pageProps }) {
+  return (
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+      </Head>
+      <Component {...pageProps} />
+    </>
+  );
+}
+```
+
+---
+
+## 🛢️ Uso de Base de Datos con Prisma
+
+### 1. Instalar Prisma
+
+```powershell
+npm install prisma --save-dev
+npx prisma init
+npm install @prisma/client
+```
+
+Esto generará:
+
+* `.env` → contiene la variable `DATABASE_URL`
+* `prisma/schema.prisma` → define tu modelo de datos
+
+### 2. Configurar `schema.prisma`
+
+Ejemplo:
+
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Persona {
+  id     Int    @id @default(autoincrement())
+  nombre String
+  edad   Int
+}
+```
+
+En el archivo `.env`, reemplaza el valor de `DATABASE_URL` por la cadena de conexión de tu base de datos.
+
+---
+
+## 🔧 Script de build para Vercel
+
+En `package.json`, asegúrate de incluir:
+
+```json
+"scripts": {
+  "build": "prisma generate && prisma migrate deploy && next build"
+}
+```
+
+---
+
+## 🛠️ Migraciones
+
+Crear o sincronizar las tablas en (con) la base de datos (con los `model`s definidos en `schema.prisma`):
+
+```powershell
+npx prisma migrate dev --name init
+```
+
+Cada vez que modifiques el esquema, ejecuta:
+
+```powershell
+npx prisma generate
+```
+
+---
+
+✅ Con estos pasos, tu entorno estará listo para comenzar a desarrollar una app moderna con **Next.js** y **Prisma** conectada a una base de datos **PostgreSQL**.
